@@ -5,7 +5,7 @@
 
 <h1>Resources</h1>
 
-<h2> {{message}} </h2>
+<h2> {{heading}} </h2>
 
 {# READ table #}
 <table>
@@ -45,7 +45,7 @@
 
 {# UPDATE form #}
 <div>
-    <h2>Update a Resource</h2>
+    <h6>Update a Resource</h6>
     <form class="cuForm" id="update_resource_form" action="/update" method="POSTT">
         <input type="hidden" name="table" value="resources">
         <label for="update_id">Resource to Update: </label>
@@ -70,10 +70,9 @@
 
 {# CREATE form #}
 <div>
-    <h2>Create a Resource</h2>
+    <h6>Create a Resource</h6>
     <form class="cuForm" id="create_resource_form" action="/create" method="POST">
         <input type="hidden" name="table" value="resources">
-        <label for="create_resource_id">Create a Resource: </label>
 
         <label for="create_resource_name">Name: </label>
         <input type="text" name="create_resource_name" id="create_resource_name">

@@ -21,5 +21,17 @@
 
     {% block content %}{% endblock %}
 
+    {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+        <div class="alert alert-info" role="alert">
+            <ul class=flashes style="list-style-type: none;>
+            {% for category, message in messages %}
+              <li class="{{ category }}">{{ message }}</li>
+            {% endfor %}
+            </ul>
+        </div>
+        {% endif %}
+    {% endwith %}
+
   </body>
 </html>
