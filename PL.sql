@@ -129,7 +129,6 @@ DELIMITER //
 CREATE PROCEDURE sp_insert_loan(
   IN p_startDate DATE,
   IN p_dueDate DATE,
-  IN p_returnedDate DATE,
   IN p_userID INT,
   IN p_resourceID INT
   )
@@ -139,7 +138,7 @@ BEGIN
   VALUES(
      p_startDate,
      p_dueDate,
-     p_returnedDate,
+     NULL,
      (SELECT userID FROM Users WHERE userID = p_userID ),
      (SELECT resourceID FROM Resources WHERE resourceID = p_userID)
   );
