@@ -323,7 +323,7 @@ def create():
         lname = request.form.get("lname")
         phone = request.form.get("phone")
         email = request.form.get("user_email")
-        return create_user(table, fname, lname, phone, email)
+        return create_user(table, fname, lname, email, phone)
     if table == "locations":
         name = request.form.get("create_name")
         description = request.form.get("create_descr")
@@ -388,7 +388,7 @@ def create_resource_location(table, resourceId, locationId):
         if "dbConnection" in locals() and dbConnection:
             dbConnection.close()
 
-def create_user(table, fname, lname, phone, email):
+def create_user(table, fname, lname, email, phone):
     dbConnection = connectDB(host, user, password, db)  # Open our database connection
     try:
         cursor = dbConnection.cursor()
@@ -396,7 +396,7 @@ def create_user(table, fname, lname, phone, email):
         # Create and execute our queries
         # Using parameterized queries (Prevents SQL injection attacks)
         query = f"CALL sp_insert_{table[:-1]}(%s,%s, %s, %s);"
-        cursor.execute(query,(fname, lname, phone, email))
+        cursor.execute(query,(fname, lname, email, phone))
         
         dbConnection.commit()  # commit the transaction
 
@@ -488,4 +488,5 @@ def reset():
 if __name__ == "__main__":
     app.run(port=PORT, debug=True)
 
-    
+
+
