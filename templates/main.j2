@@ -19,19 +19,39 @@
         <a href="/resourceLocations">ResourceLocations</a>
     </nav>
 
-    {% block content %}{% endblock %}
 
-    {% with messages = get_flashed_messages(with_categories=true) %}
-        {% if messages %}
-        <div class="alert alert-info" role="alert">
-            <ul class=flashes style="list-style-type: none;>
-            {% for category, message in messages %}
-              <li class="{{ category }}">{{ message }}</li>
-            {% endfor %}
-            </ul>
-        </div>
-        {% endif %}
-    {% endwith %}
+    <div>
+      {% block db_table %}
+      {% endblock %}
+    </div>
+  
+    <div>
+      {% block reset %} <!--  Code for the button in this function is only minorly updated from AI provided code when googling "set up button in flask app", 11/19/2025: https://www.google.com/search?q=set+up+button+in+flask+app&sca_esv=ce0ce1db3a943257&rlz=1C5CHFA_enUS1131US1133&sxsrf=AE3TifM83rWTMHO4_rDFma6zLKXezvrNow%3A1763609538747&ei=woseabGrLdbX0PEPyNTN-Ak&ved=0ahUKEwixlNHA5f-QAxXWKzQIHUhqE58Q4dUDCBE&uact=5&oq=set+up+button+in+flask+app&gs_lp=Egxnd3Mtd2l6LXNlcnAiGnNldCB1cCBidXR0b24gaW4gZmxhc2sgYXBwMgcQIRigARgKMgcQIRigARgKMgcQIRigARgKMgcQIRigARgKMgcQIRigARgKSLYrUOgHWIcpcAN4AZABAJgBtAGgAZkcqgEEMC4yNrgBA8gBAPgBAZgCHaACoR3CAgoQABiwAxjWBBhHwgILEAAYgAQYkQIYigXCAgoQABiABBhDGIoFwgIOEAAYgAQYsQMYgwEYigXCAg4QLhiABBixAxiDARiKBcICFhAuGIAEGLEDGNEDGEMYgwEYxwEYigXCAgsQLhiABBjRAxjHAcICERAuGIAEGLEDGNEDGIMBGMcBwgIIEC4YgAQYsQPCAggQABiABBixA8ICCxAuGIAEGLEDGIMBwgIFEAAYgATCAgsQABiABBixAxiDAcICBxAAGIAEGA3CAgYQABgNGB7CAgYQABgWGB7CAggQABgWGAoYHsICCBAAGKIEGIkFwgIIEAAYgAQYogTCAgUQABjvBcICBRAhGJ8FwgIFECEYqwKYAwCIBgGQBgiSBwQzLjI2oAfi1AGyBwQwLjI2uAeHHcIHCTAuMTguMTAuMcgHXA&sclient=gws-wiz-serp -->
+          <form action={{ action_name }}  method="POST">
+              <input type="hidden" name="reset-form" value="reset">
+              <button type="submit" class="reset-btn">Reset Database</button>
+          </form>
+      {% endblock %}
+    </div>
+    
+    <div>
+      {% block forms %}
+      {% endblock %}
+    </div>
+    
+  
+        {% with messages = get_flashed_messages(with_categories=true) %}
+              {% if messages %}
+              <div class="alert alert-info" role="alert">
+                  <ul class=flashes style="list-style-type: none;>
+                  {% for category, message in messages %}
+                    <li class="{{ category }}">{{ message }}</li>
+                  {% endfor %}
+                  </ul>
+              </div>
+              {% endif %}
+        {% endwith %}
+
 
   </body>
 </html>
