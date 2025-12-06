@@ -1,7 +1,7 @@
 <!-- Code on this page adapted from bsg-people.j2 in the cs340 materials here: https://canvas.oregonstate.edu/courses/2017561/pages/exploration-web-application-technology-2?module_item_id=25645131 -->
 
 {% extends "main.j2" %}
-{% block content %}
+{% block db_table %}
 
 <h1> Resource Locations</h1>
 
@@ -39,13 +39,57 @@
         {% endfor %}
     </tbody>
 </table>
+{% endblock %}
+
+{% block reset %}
+{{ super() }}
+{% endblock %}
+
+{% block forms %}
+{# INSERT form #}
+<div class="create-form">
+    <h6>Create a Resource Location</h6>
+    <form class="cuForm" id="create_resourceLocation_form" action="/create", method="POST">
+        <input type="hidden" name="table" value="resourceLocations">
+       
+        <label for="create_resource">Resource: </label>
+        <select name="create_resource" id="create_resource" required>
+            <option value="NULL" selected>Select a Resource</option>
+            {% for resource in resources %}
+            <option value="{{resource.id}}" required>
+                {{resource.name}}
+            </option>
+            {% endfor %}
+        </select>
+
+        <br>
+        <br>
+
+        <label for="create_location">Location:&#20; </label>
+        <select name="create_location" id="create_location" required>
+            <option value="NULL" selected>Select a location</option>
+            {% for location in locations %}
+            <option value="{{location.id}}" required>
+                {{location.name}}
+            </option>
+            {% endfor %}
+        </select>
+
+        <br>
+        <br>
+
+        <input type="submit" class="submit-btn">
+    </form>
+</div>
 
 {# UPDATE form #}
-<div>
+<div class="update-form">
     <h6>Update a Resource Location</h6>
     <form class="cuForm" id="update_resourceLocation_form" action="/update" method="POST">
         <input type="hidden" name="table" value="resourceLocations">
+        
         <label for="update_id">Resource Location to Update: </label>
+        <br>
         <select name="update_id" id="update_resourceLocation_id" required>
             <option value="" disabled selected>Select a resource location to edit</option>
             {% for resourceLocation in resourceLocations %}
@@ -57,10 +101,13 @@
             {% endfor %}
         </select>
 
+        <br>
+        <br>
+
         <label for="update_data">New location: </label>
+        <br>
         <select name="update_data" id="update_location" required>
             <option value="NULL" selected>Select a location</option>
-            <option value="NULL">&lt; None &gt;</option>
             {% for location in locations %}
             <option value="{{location.id}}" required>
                 {{location.name}}
@@ -68,36 +115,10 @@
             {% endfor %}
         </select>
 
-        <input type="submit">
+        <br>
+        <br>
+
+        <input type="submit" class="submit-update">
     </form>
 </div>
-
-{# INSERT form #}
-<h6>Create a Resource Location</h6>
-<form class="cuForm" id="create_resourceLocation_form" action="/create", method="POST">
-    <input type="hidden" name="table" value="resourceLocations">
-    <label for="create_resource">Resource: </label>
-    <select name="create_resource" id="create_resource" required>
-        <option value="NULL" selected>Select a Resource</option>
-        <option value="NULL">&lt; None &gt;</option>
-        {% for resource in resources %}
-        <option value="{{resource.id}}" required>
-            {{resource.name}}
-        </option>
-        {% endfor %}
-    </select>
-
-    <label for="create_location">Location: </label>
-    <select name="create_location" id="create_location" required>
-        <option value="NULL" selected>Select a location</option>
-        <option value="NULL">&lt; None &gt;</option>
-        {% for location in locations %}
-        <option value="{{location.id}}" required>
-            {{location.name}}
-        </option>
-        {% endfor %}
-    </select>
-
-    <input type="submit">
-</form>
 {% endblock %}
