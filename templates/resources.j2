@@ -1,7 +1,7 @@
 <!-- Code on this page adapted from bsg-people.j2 in the cs340 materials here: https://canvas.oregonstate.edu/courses/2017561/pages/exploration-web-application-technology-2?module_item_id=25645131 -->
 
 {% extends "main.j2" %}
-{% block content %}
+{% block db_table %}
 
 <h1>Resources</h1>
 
@@ -42,13 +42,57 @@
         {% endfor %}
     </tbody>
 </table>
+{% endblock %}
+
+{% block reset %}
+{{ super() }}
+{% endblock %}
+
+
+{% block forms %}
+{# CREATE form #}
+<div class="create-form">
+    <h6>Create a Resource</h6>
+    <form class="cuForm" id="create_resource_form" action="/create" method="POST">
+        <input type="hidden" name="table" value="resources">
+
+        <label for="create_resource_name">Name:&#20;&#20;&#20;&#20;&#20;&#20;&#20;&#20; </label>
+        <input type="text" name="create_resource_name" id="create_resource_name" required>
+
+        <br>
+        <br>
+
+        <label for="create_resource_description">Description: </label>
+        <textarea type="text" style="width: 600px;" name="create_resource_description" id="create_resource_description" required></textarea>
+
+        <br>
+        <br>
+
+        <label for="create_owner">Owner:&#20;&#20;&#20;&#20;&#20;&#20;&#20;&#20;  </label>
+        <select name="create_owner" id="create_owner" required>
+            <option value="NULL" selected>Select a User</option>
+            {% for user in users %}
+            <option value="{{user.userID}}" required>
+                {{user.name}}
+            </option>
+            {% endfor %}
+        </select>
+
+        <br>
+        <br>
+
+        <input type="submit" class="submit-btn">
+    </form>
+</div>
 
 {# UPDATE form #}
-<div>
+<div class="update-form">
     <h6>Update a Resource</h6>
     <form class="cuForm" id="update_resource_form" action="/update" method="POST">
         <input type="hidden" name="table" value="resources">
+       
         <label for="update_id">Resource to Update: </label>
+        <br>
         <select name="update_id" id="update_resource_id" required>
             <option value="" disabled selected>Select a resource</option>
             {% for resource in resources %}
@@ -60,39 +104,17 @@
             {% endfor %}
         </select>
 
+        <br>
+        <br>
+
         <label for="update_data">New Description: </label>
-        <input type="text" name="update_data" id="update_resource_description">
+         <br>
+        <textarea type="text" style="width: 600px;" name="update_data" id="update_resource_description" required></textarea>
 
-        <input type="submit">
+        <br>
+        <br>
+
+        <input type="submit" class="submit-update">
     </form>
 </div>
-
-
-{# CREATE form #}
-<div>
-    <h6>Create a Resource</h6>
-    <form class="cuForm" id="create_resource_form" action="/create" method="POST">
-        <input type="hidden" name="table" value="resources">
-
-        <label for="create_resource_name">Name: </label>
-        <input type="text" name="create_resource_name" id="create_resource_name">
-
-        <label for="create_resource_description">Description: </label>
-        <input type="text" name="create_resource_description" id="create_resource_description">
-
-        <label for="create_owner">Owner: </label>
-        <select name="create_owner" id="create_owner" required>
-            <option value="NULL" selected>Select a User</option>
-            <option value="NULL">&lt; None &gt;</option>
-            {% for user in users %}
-            <option value="{{user.userID}}" required>
-                {{user.name}}
-            </option>
-            {% endfor %}
-        </select>
-
-        <input type="submit">
-    </form>
-</div>
-
 {% endblock %}
