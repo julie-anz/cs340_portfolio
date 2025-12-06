@@ -33,28 +33,35 @@ app.config['SECRET_KEY'] = 'default-secret-key' #needed for flash messages
 
 # READ ROUTES
 @app.route("/", methods=['GET', 'POST'])
+@app.route("/home", methods=['GET', 'POST'])
 def home():
-    if request.method == 'POST':
+    if request.method == 'POST' and request.form.get("reset-form") == "reset":
         try:
             reset()
-            return render_template('home.j2', reset_submitted=True) 
+            return redirect("/") 
         except Exception as e:
-            print(f"Error rendering page: {e}")
-            flash("An error occurred while rendering the page.", 'error')
-            return render_template('home.j2', reset_submitted=False)
+            flash(f"An error occurred resetting the database. {e}", 'error')
+            return redirect("/")
 
     else:
         try:
-            return render_template("home.j2", reset_submitted=False)
+            return render_template("home.j2", action_name="'/'")
 
         except Exception as e:
-            print(f"Error rendering page: {e}")
-            flash("An error occurred while rendering the page.", 'error')
-            return render_template('home.j2', reset_submitted=False)
+            flash(f"An error occurred while rendering the page. {e}", 'error')
+            return render_template('home.j2', action_name="'/'")
 
-@app.route("/users", methods=['GET'])
+@app.route("/users", methods=['GET', 'POST'])
 def users():
     
+    if request.method == 'POST' and request.form.get("reset-form") == "reset":
+        try:
+            reset()
+            return redirect("/users")
+        except Exception as e:
+            flash(f"An error occurred resetting the database. {e}", 'error')
+            return redirect("/users")
+
     dbConnection = connectDB(host, user, password, db)  # Open our database connection
 
     heading = "On this page you can view records in the Users table."
@@ -66,14 +73,13 @@ def users():
 
         # Render the users.j2 file, and also send the renderer an object containing the users information
         return render_template(
-            "users.j2", headers=headers, users=users, heading=heading
+            "users.j2", headers=headers, users=users, heading=heading, action_name="'/users'"
         )
     
     except Exception as e:
-        print(f"Error executing queries: {e}")
-        flash("An error occurred while executing the database queries.",'error')
+        flash(f"An error occurred while executing the database queries. {e}",'error')
         return render_template(
-            "users.j2", headers=headers, users=users, heading=heading
+            "users.j2", headers=headers, users=users, heading=heading, action_name="'/users'"
         )
 
     finally:
@@ -81,9 +87,17 @@ def users():
         if "dbConnection" in locals() and dbConnection:
             dbConnection.close()
 
-@app.route("/loans", methods=['GET'])
-def loans():
+@app.route("/loans", methods=['GET', 'POST'])
+def loans(): 
     
+    if request.method == 'POST' and request.form.get("reset-form") == "reset":
+        try:
+            reset()
+            return redirect("/loans")
+        except Exception as e:
+            flash(f"An error occurred resetting the database. {e}", 'error')
+            return redirect("/loans")
+
     dbConnection = connectDB(host, user, password, db)  # Open our database connection
 
     heading = "On this page you can view and delete records in the Loans table."
@@ -92,7 +106,6 @@ def loans():
         query1 = "SELECT l.loanID, l.startDate, l.dueDate, r.resourceName, u.firstName, u.lastName FROM Loans l JOIN Users u on l.userID = u.userID JOIN Resources r on l.resourceID = r.resourceID;"
      
         loans = query(dbConnection, query1).fetchall()
-        print(loans)
         headers = ["Start Date", "Due Date", "Resource Name", "Borrower First Name", "Borrower Last Name", "Delete"]
 
         userQuery = "SELECT userID, CONCAT(firstName, ' ', lastName) AS name FROM Users;"
@@ -103,14 +116,13 @@ def loans():
 
         # Render the loans.j2 file, and also send the renderer an object containing the loan's information
         return render_template(
-            "loans.j2", headers=headers, loans=loans, heading=heading, users=users, resources=resources
+            "loans.j2", headers=headers, loans=loans, heading=heading, users=users, resources=resources, action_name="'/loans'"
         )
     
     except Exception as e:
-        print(f"Error executing queries: {e}")
-        flash("An error occurred while executing the database queries.",'error')
+        flash(f"An error occurred while executing the database queries. {e}",'error')
         return render_template(
-            "loans.j2", headers=headers, loans=loans, heading=heading, users=users, resources=resources
+            "loans.j2", headers=headers, loans=loans, heading=heading, users=users, resources=resources, action_name="'/loans'"
         )
 
     finally:
@@ -119,9 +131,17 @@ def loans():
             dbConnection.close()
 
 
-@app.route("/resources", methods=['GET'])
+@app.route("/resources", methods=['GET','POST'])
 def resources():
     
+    if request.method == 'POST' and request.form.get("reset-form") == "reset":
+        try:
+            reset()
+            return redirect("/resources")
+        except Exception as e:
+            flash(f"An error occurred resetting the database. {e}", 'error')
+            return redirect("/resources")
+
     dbConnection = connectDB(host, user, password, db)  # Open our database connection
 
     heading = "On this page you can view and delete records in the Resources table."
@@ -130,7 +150,6 @@ def resources():
         query1 = "SELECT r.resourceID, r.resourceName, r.resourceDescription, u.firstName, u.lastName FROM Resources r JOIN Users u on r.userID = u.userID ;"
      
         resources = query(dbConnection, query1).fetchall()
-        print(resources)
         headers = ["Resource Name", "Resource Description", "Owner First Name", "Owner Last Name", "Delete"]
 
         userQuery = "SELECT userID, CONCAT(firstName, ' ', lastName) AS name FROM Users;"
@@ -138,14 +157,13 @@ def resources():
 
         # Render the resources.j2 file, and also send the renderer an object containing the resource's information
         return render_template(
-            "resources.j2", headers=headers, resources=resources, heading=heading, users=users
+            "resources.j2", headers=headers, resources=resources, heading=heading, users=users, action_name="'/resources'"
         )
     
     except Exception as e:
-        print(f"Error executing queries: {e}")
-        flash("An error occurred while executing the database queries.",'error' )
+        flash(f"An error occurred while executing the database queries. {e}",'error' )
         return render_template(
-            "resources.j2", headers=headers, resources=resources, heading=heading, users=users
+            "resources.j2", headers=headers, resources=resources, heading=heading, users=users, action_name="'/resources'"
         )
 
     finally:
@@ -153,18 +171,26 @@ def resources():
         if "dbConnection" in locals() and dbConnection:
             dbConnection.close()
 
-@app.route("/resourceLocations", methods=['GET'])
+@app.route("/resourceLocations", methods=['GET','POST'])
 def resourceLocations():
     
+    if request.method == 'POST' and request.form.get("reset-form") == "reset":
+        try:
+            reset()
+            return redirect("/resourceLocations")
+        except Exception as e:
+            flash(f"An error occurred resetting the database. {e}", 'error') 
+            return redirect("/resourceLocations")
+
     dbConnection = connectDB(host, user, password, db)  # Open our database connection
 
     heading = "On this page you can view and delete records in the ResourceLocations table."
+
     try:
         # Create and execute our query
         query1 = "SELECT rl.resourceLocationsID, r.resourceName, l.locationName FROM ResourceLocations rl JOIN Resources r on rl.resourceID = r.resourceID JOIN Locations l on rl.locationID = l.locationID;"
      
         resourceLocations = query(dbConnection, query1).fetchall()
-        print(resourceLocations)
         headers = ["Resource Name", "Location Name", "Delete"]
 
         resourceQuery = "SELECT resourceID as id, resourceName AS name FROM Resources;"
@@ -175,14 +201,13 @@ def resourceLocations():
 
         # Render the resourceLocations.j2 file, and also send the renderer an object containing the resourceLocation's information
         return render_template(
-            "resourceLocations.j2", headers=headers, resourceLocations=resourceLocations, heading=heading, resources=resources, locations=locations
+            "resourceLocations.j2", headers=headers, resourceLocations=resourceLocations, heading=heading, resources=resources, locations=locations, action_name="'/resourceLocations'"
         )
     
     except Exception as e:
-        print(f"Error executing queries: {e}")
-        flash("An error occurred while executing the database queries.", 'error')
+        flash(f"An error occurred while executing the database queries. {e}", 'error')
         return render_template(
-            "resourceLocations.j2", headers=headers, resourceLocations=resourceLocations, heading=heading, resources=resources, locations=locations
+            "resourceLocations.j2", headers=headers, resourceLocations=resourceLocations, heading=heading, resources=resources, locations=locations, action_name="'/resourceLocations'"
         )
 
     finally:
@@ -190,30 +215,37 @@ def resourceLocations():
         if "dbConnection" in locals() and dbConnection:
             dbConnection.close()
 
-@app.route("/locations", methods=['GET'])
+@app.route("/locations", methods=['GET','POST'])
 def locations():
-    
+
+    if request.method == 'POST' and request.form.get("reset-form") == "reset":
+        try:
+            reset()
+            return redirect("/locations")
+        except Exception as e:
+            flash(f"An error occurred resetting the database. {e}", 'error') 
+            return redirect("/locations")
+
     dbConnection = connectDB(host, user, password, db)  # Open our database connection
 
     heading = "On this page you can view and delete records in the Locations table."
+
     try:
         # Create and execute our query
         query1 = "SELECT * FROM Locations;"
      
         locations = query(dbConnection, query1).fetchall()
-        print(locations)
         headers = ["Location Name", "Location Description", "Delete"]
 
         # Render the locations.j2 file, and also send the renderer an object containing the location's information
         return render_template(
-            "locations.j2", headers=headers, locations=locations, heading=heading
+            "locations.j2", headers=headers, locations=locations, heading=heading, action_name="'/locations'"
         )
     
     except Exception as e:
-        print(f"Error executing queries: {e}")
-        flash("An error occurred while executing the database queries.", 'error')
+        flash("An error occurred while executing the database queries. {e}", 'error')
         return render_template(
-            "locations.j2", headers=headers, locations=locations, heading=heading
+            "locations.j2", headers=headers, locations=locations, heading=heading, action_name="'/locations'"
         )
 
     finally:
@@ -233,7 +265,6 @@ def delete():
     table = request.form["table"]
     id = request.form["id"]
     name = request.form["name"]
-    print(table,id,name)
 
     try:
         cursor = dbConnection.cursor()
@@ -245,14 +276,11 @@ def delete():
 
         dbConnection.commit()  # commit the transaction
 
-        print(f"DELETE row from {table} with ID {id}: {name}")
-
         # Redirect the user to the updated webpage
         return redirect(f"/{table}")
 
     except Exception as e:
-        print(f"Error executing queries: {e}")
-        flash("An error occurred while executing the database queries.", 'error')
+        flash(f"An error occurred while executing the database queries. {e}", 'error')
         return redirect(f"/{table}")
 
     finally:
@@ -285,7 +313,6 @@ def update():
         return redirect(f"/{table}")
     
     except Exception as e:
-        print(f"Error executing queries: {e}")
         flash(f"An error occurred while executing the database queries. {e}", 'error')
         return redirect(f"/{table}")
     
@@ -301,14 +328,7 @@ def create():
     """
 
     table = request.form["table"]
-    # match table:
-    #     case "resources":
-    #         userId = request.form.get("create_owner")
-    #         name = request.form["create_resource_name"]
-    #         description = request.form["create_resource_description"]
-    #         create_resource(table, userId, name, description)
-    #     case "resourceLocations":    
-    #         create_resource_location()
+   
     if table == "resources":
         userId = request.form.get("create_owner")
         name = request.form.get("create_resource_name")
@@ -335,7 +355,9 @@ def create():
         resourceId = request.form.get("loan_resource")
         return create_loan(table, sdate, ddate, userId, resourceId)
     
-
+###   
+### # helper functions for insert operations
+####
 def create_resource(table, userId, name, description):
     dbConnection = connectDB(host, user, password, db)  # Open our database connection
     try:
@@ -352,7 +374,6 @@ def create_resource(table, userId, name, description):
         return redirect(f"/{table}")
     
     except Exception as e:
-        print(f"Error executing queries: {e}")
         flash(f"An error occurred while executing the database queries. {e}", 'error')
         return redirect(f"/{table}")
     
@@ -370,7 +391,6 @@ def create_resource_location(table, resourceId, locationId):
         # Create and execute our queries
         # Using parameterized queries (Prevents SQL injection attacks)
         query = f"CALL sp_insert_{table[:-1]}(%s,%s);"
-        print(resourceId, locationId)
         cursor.execute(query,(resourceId, locationId))
         
         dbConnection.commit()  # commit the transaction
@@ -379,7 +399,6 @@ def create_resource_location(table, resourceId, locationId):
         return redirect(f"/{table}")
     
     except Exception as e:
-        print(f"Error executing queries: {e}")
         flash(f"An error occurred while executing the database queries. {e}", 'error')
         return redirect(f"/{table}")
     
@@ -404,7 +423,6 @@ def create_user(table, fname, lname, email, phone):
         return redirect(f"/{table}")
     
     except Exception as e:
-        print(f"Error executing queries: {e}")
         flash(f"An error occurred while executing the database queries. {e}", 'error')
         return redirect(f"/{table}")
     
@@ -429,7 +447,6 @@ def create_location(table, name, description):
         return redirect(f"/{table}")
     
     except Exception as e:
-        print(f"Error executing queries: {e}")
         flash(f"An error occurred while executing the database queries. {e}", 'error')
         return redirect(f"/{table}")
     
@@ -454,7 +471,6 @@ def create_loan(table, sdate, ddate, userId, resourceId):
         return redirect(f"/{table}")
     
     except Exception as e:
-        print(f"Error executing queries: {e}")
         flash(f"An error occurred while executing the database queries. {e}", 'error')
         return redirect(f"/{table}")
     
@@ -462,7 +478,6 @@ def create_loan(table, sdate, ddate, userId, resourceId):
         # Close the DB connection, if it exists
         if "dbConnection" in locals() and dbConnection:
             dbConnection.close()
-
 
 
 def reset():
@@ -487,6 +502,3 @@ def reset():
 
 if __name__ == "__main__":
     app.run(port=PORT, debug=True)
-
-
-
