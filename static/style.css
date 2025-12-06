@@ -1,21 +1,92 @@
-/* Code on this page copied verbatim from style.css in the cs340 materials here: https://canvas.oregonstate.edu/courses/2017561/pages/exploration-web-application-technology-2?module_item_id=25645131 */
-
+/* Code in this commented block copied verbatim with adjustments to colors
+from style.css in the cs340 materials here:
+https://canvas.oregonstate.edu/courses/2017561/pages/exploration-web-application-technology-2?module_item_id=25645131 */
+/* ********************************* */
 h1, h2 { margin-left: 16px;}
 table {border-collapse: collapse;margin-left: 32px;}
 th, td {
-    border: 1px solid #ddd;
+    border: 1px solid #2b2b2d;
     padding: 12px;
     text-align: center;
 }
-th {background-color: #f2f2f2;}
-tr:nth-child(even) {background-color: #f9f9f9;}
+th {background-color: #2b2b2d; color: #cecece; border: 1px solid #cecece;}
+tr:nth-child(even) {background-color: lightgreen;}
+tr:nth-child(odd) {background-color: rgb(223, 237, 238);}
 .cuForm { margin-left: 32px;}
 input, select { margin-bottom: 4px;margin-right: 12px;}
-nav {background-color: #cecece;padding: 16px;}
-a {margin-left: 16px;}
+th {background-color: #2b2b2d; color: #cecece; border: 1px solid #cecece;}
+nav {background-color: #414145;padding: 16px; color:#cecece;}
+a {margin-left: 16px;color:white;}
 .homepageDescription {margin-left: 32px;}
+/* ********************************* */
 
-/* added styling */
-button{
+
+
+/* our own added styling */
+
+button, table{
     border-radius: 5px;
+}
+
+.reset-btn{
+    background-color: rgb(92, 14, 236);
+    color:rgb(244, 239, 239);
+    margin-left: 30px;
+    border: none;
+    padding: 10px;
+    margin-top: 20px;
+}
+
+.create-form h6{
+    color: aqua;
+}
+
+.update-form h6{
+    color: plum;
+}
+
+.create-form, .update-form{
+    border: 2px solid black;
+    margin: 20px;
+    padding: 20px;
+    border-radius: 5px;
+    background-color:#2b2b2d;
+    color: #cecece;
+    margin-left: 32px;
+    width: fit-content;
+}
+
+
+input, textarea{
+    margin-right: 10px;
+
+}
+
+.submit-btn{
+    background-color: aqua;
+    border-radius: 2px;
+    border: none;
+}
+
+.submit-update{
+    background-color: plum;
+    border-radius: 2px;
+    border: none;
+}
+
+h1, h2{
+    margin-left: 20px;
+}
+
+/* h1{
+    color:rgb(92, 14, 236);
+} */
+
+h2{
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
+}
+
+h6{
+    text-align: center;
+    margin-bottom: 20px;
 }
