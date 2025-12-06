@@ -1,7 +1,7 @@
 <!-- Code on this page adapted from bsg-people.j2 in the cs340 materials here: https://canvas.oregonstate.edu/courses/2017561/pages/exploration-web-application-technology-2?module_item_id=25645131 -->
 
 {% extends "main.j2" %}
-{% block content %}
+{% block db_table %}
 
 <h1>loans</h1>
 
@@ -43,43 +43,60 @@
         {% endfor %}
     </tbody>
 </table>
+{% endblock %}
 
+{% block reset %}
+{{ super() }}
+{% endblock %}
 
+{% block forms %}
 {# INSERT form #}
-<h6>Create a Loan</h6>
-<form class="cuForm" id="create_loan_form" action="/create", method="POST">
-    <input type="hidden" name="table" value="loans">
+<div class="create-form">
+    <h6>Create a Loan</h6>
+    <form class="cuForm" id="create_loan_form" action="/create", method="POST">
+        <input type="hidden" name="table" value="loans">
 
-     <label for="sdate">Start Date: </label>
-        <input type="text" name="sdate" id="create_sdate">
+        <label for="sdate">Start Date:&#20; </label>
+            <input type="date" name="sdate" id="create_sdate" required>
 
-        <label for="ddate">Due Date: </label>
-        <input type="text" name="ddate" id="create_ddate">
+            <br>
+            <br>
 
-    <label for="loan_user"> Borrower: </label>
-    <select name="loan_user" id="loan_user" required>
-        <option value="NULL" selected>Select a Borrower</option>
-        {% for user in users %}
-        <option value="{{user.userID}}" required>
-            {{user.name}} 
-        </option>
-        {% endfor %}
-    </select>
+            <label for="ddate">Due Date:&#20;&#20; </label>
+            <input type="date" name="ddate" id="create_ddate" required>
 
+            <br>
+            <br>
 
-    <label for="loan_resourse"> Resource: </label>
-    <select name="loan_resourse" id="loan_resourse" required>
-        <option value="NULL" selected>Select a Resource</option>
-        {% for resource in resources %}
-        <option value="{{resource.resourceID}}" required>
-             {{resource.resourceName}}
-             -
-             {{resource.resourceDescription}}
-        </option>
-        {% endfor %}
-    </select>
+        <label for="loan_user"> Borrower:&#20;&#20; </label>
+        <select name="loan_user" id="loan_user" required>
+            <option value="NULL" selected>Select a Borrower</option>
+            {% for user in users %}
+            <option value="{{user.userID}}" required>
+                {{user.name}} 
+            </option>
+            {% endfor %}
+        </select>
 
-    <input type="submit">
-</form>
+        <br>
+        <br>
 
+        <label for="loan_resourse"> Resource:&#20;&#20; </label>
+        <select name="loan_resourse" id="loan_resourse" required>
+            <option value="NULL" selected>Select a Resource</option>
+            {% for resource in resources %}
+            <option value="{{resource.resourceID}}" required>
+                {{resource.resourceName}}
+                -
+                {{resource.resourceDescription}}
+            </option>
+            {% endfor %}
+        </select>
+
+        <br>
+        <br>
+
+        <input type="submit" class="submit-btn">
+    </form>
+</div>
 {% endblock %}
