@@ -1,5 +1,5 @@
 ## Portfolio Project for OSU CS340
-### By Margaret Barnes and Julie Anzaroot
+## By Margaret Barnes and Julie Anzaroot
 
 
 ### Code Attribution
