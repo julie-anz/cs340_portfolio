@@ -38,6 +38,7 @@ def home():
     if request.method == 'POST' and request.form.get("reset-form") == "reset":
         try:
             reset()
+            flash("The databse has been reset!", 'success')
             return redirect("/") 
         except Exception as e:
             flash(f"An error occurred resetting the database. {e}", 'error')
@@ -57,6 +58,7 @@ def users():
     if request.method == 'POST' and request.form.get("reset-form") == "reset":
         try:
             reset()
+            flash("The databse has been reset!", 'success')
             return redirect("/users")
         except Exception as e:
             flash(f"An error occurred resetting the database. {e}", 'error')
@@ -93,6 +95,7 @@ def loans():
     if request.method == 'POST' and request.form.get("reset-form") == "reset":
         try:
             reset()
+            flash("The databse has been reset!", 'success')
             return redirect("/loans")
         except Exception as e:
             flash(f"An error occurred resetting the database. {e}", 'error')
@@ -137,6 +140,7 @@ def resources():
     if request.method == 'POST' and request.form.get("reset-form") == "reset":
         try:
             reset()
+            flash("The databse has been reset!", 'success')
             return redirect("/resources")
         except Exception as e:
             flash(f"An error occurred resetting the database. {e}", 'error')
@@ -177,6 +181,7 @@ def resourceLocations():
     if request.method == 'POST' and request.form.get("reset-form") == "reset":
         try:
             reset()
+            flash("The databse has been reset!", 'success')
             return redirect("/resourceLocations")
         except Exception as e:
             flash(f"An error occurred resetting the database. {e}", 'error') 
@@ -221,6 +226,7 @@ def locations():
     if request.method == 'POST' and request.form.get("reset-form") == "reset":
         try:
             reset()
+            flash("The databse has been reset!", 'success')
             return redirect("/locations")
         except Exception as e:
             flash(f"An error occurred resetting the database. {e}", 'error') 
@@ -276,6 +282,7 @@ def delete():
 
         dbConnection.commit()  # commit the transaction
 
+        flash("The record has been deleted!", 'success')
         # Redirect the user to the updated webpage
         return redirect(f"/{table}")
 
@@ -309,6 +316,7 @@ def update():
         
         dbConnection.commit()  # commit the transaction
 
+        flash("The record has been updated!", 'success')
         # Redirect the user to the updated webpage
         return redirect(f"/{table}")
     
@@ -354,7 +362,7 @@ def create():
         userId = request.form.get("loan_user")
         resourceId = request.form.get("loan_resource")
         return create_loan(table, sdate, ddate, userId, resourceId)
-    
+
 ###   
 ### # helper functions for insert operations
 ####
@@ -370,6 +378,7 @@ def create_resource(table, userId, name, description):
         
         dbConnection.commit()  # commit the transaction
 
+        flash("The record has been created!", 'success')
         # Redirect the user to the updated webpage
         return redirect(f"/{table}")
     
@@ -395,6 +404,7 @@ def create_resource_location(table, resourceId, locationId):
         
         dbConnection.commit()  # commit the transaction
 
+        flash("The record has been created!", 'success')
         # Redirect the user to the updated webpage
         return redirect(f"/{table}")
     
@@ -419,6 +429,7 @@ def create_user(table, fname, lname, email, phone):
         
         dbConnection.commit()  # commit the transaction
 
+        flash("The record has been created!", 'success')
         # Redirect the user to the updated webpage
         return redirect(f"/{table}")
     
@@ -443,6 +454,7 @@ def create_location(table, name, description):
         
         dbConnection.commit()  # commit the transaction
 
+        flash("The record has been created!", 'success')
         # Redirect the user to the updated webpage
         return redirect(f"/{table}")
     
@@ -468,6 +480,7 @@ def create_loan(table, sdate, ddate, userId, resourceId):
         dbConnection.commit()  # commit the transaction
 
         # Redirect the user to the updated webpage
+        flash("The record has been created!", 'success')
         return redirect(f"/{table}")
     
     except Exception as e:
@@ -502,3 +515,6 @@ def reset():
 
 if __name__ == "__main__":
     app.run(port=PORT, debug=True)
+
+
+
