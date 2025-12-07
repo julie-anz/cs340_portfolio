@@ -66,7 +66,7 @@ def users():
 
     dbConnection = connectDB(host, user, password, db)  # Open our database connection
 
-    heading = "On this page you can view records in the Users table."
+    heading = "On this page you can view, delete, and create records in the Users table."
     try:
         # Create and execute our query
         query1 = "SELECT * FROM Users;"
@@ -103,7 +103,7 @@ def loans():
 
     dbConnection = connectDB(host, user, password, db)  # Open our database connection
 
-    heading = "On this page you can view and delete records in the Loans table."
+    heading = "On this page you can view, delete, and create records in the Loans table."
     try:
         # Create and execute our query
         query1 = "SELECT l.loanID, l.startDate, l.dueDate, r.resourceName, u.firstName, u.lastName FROM Loans l JOIN Users u on l.userID = u.userID JOIN Resources r on l.resourceID = r.resourceID;"
@@ -148,7 +148,7 @@ def resources():
 
     dbConnection = connectDB(host, user, password, db)  # Open our database connection
 
-    heading = "On this page you can view and delete records in the Resources table."
+    heading = "On this page you can view, delete, create, and update records in the Resources table."
     try:
         # Create and execute our query
         query1 = "SELECT r.resourceID, r.resourceName, r.resourceDescription, u.firstName, u.lastName FROM Resources r JOIN Users u on r.userID = u.userID ;"
@@ -189,7 +189,7 @@ def resourceLocations():
 
     dbConnection = connectDB(host, user, password, db)  # Open our database connection
 
-    heading = "On this page you can view and delete records in the ResourceLocations table."
+    heading = "On this page you can view, delete, create, and update records in the ResourceLocations table."
 
     try:
         # Create and execute our query
@@ -234,7 +234,7 @@ def locations():
 
     dbConnection = connectDB(host, user, password, db)  # Open our database connection
 
-    heading = "On this page you can view and delete records in the Locations table."
+    heading = "On this page you can view, delete, and create records in the Locations table."
 
     try:
         # Create and execute our query
